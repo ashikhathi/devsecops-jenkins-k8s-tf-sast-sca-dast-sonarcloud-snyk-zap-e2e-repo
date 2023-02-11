@@ -4,26 +4,6 @@ pipeline {
         maven 'Maven_3_5_2'  
     }
    stages{
-	stage('Build') { 
-            steps { 
-               withDockerRegistry([credentialsId: "dockerlogin", url: ""]) {
-                 script{
-                 app =  docker.build("asg")
-                 }
-               }
-            }
-    }
-
-	stage('Push') {
-            steps {
-                script{
-                    docker.withRegistry('https://669035188099.dkr.ecr.eu-west-2.amazonaws.com', 'ecr:eu-west-2:aws-credentials') {
-                    app.push("latest")
-                    }
-                }
-            }
-    	}
-	   
 	stage('Kubernetes Deployment of ASG Bugg Web Application') {
 	   steps {
 	      withKubeConfig([credentialsId: 'kubelogin']) {
@@ -32,7 +12,7 @@ pipeline {
 		}
 	      }
    	}
-	   
+/*	   
 	stage ('wait_for_testing'){
 	   steps {
 		   sh 'pwd; sleep 180; echo "Application Has been deployed on K8S"'
@@ -46,6 +26,6 @@ pipeline {
 				archiveArtifacts artifacts: 'zap_report.html'
 		    }
 	     }
-       } 
+       } */
   }
 }
